@@ -12,7 +12,7 @@ public class JournalEntryService {
     @Autowired
     private JournalEntryRepo journalEntryRepo;
 
-    public void saveJournalEntry(JournalEntry journalEntry){
+    public void saveEntry(JournalEntry journalEntry){
         journalEntryRepo.save(journalEntry);
     }
 }

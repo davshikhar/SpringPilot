@@ -1,5 +1,6 @@
 package org.example.springpilot.JournalEntryController;
 
+import jakarta.annotation.PostConstruct;
 import org.example.springpilot.Entity.JournalEntry;
 import org.example.springpilot.Service.JournalEntryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class Controller {
 
     @PostMapping
     public boolean createEntry(@RequestBody JournalEntry myEntry){
-        journalEntryService.saveJournalEntry(myEntry);
+        journalEntryService.saveEntry(myEntry);
         return true;
     }
 
@@ -43,4 +44,18 @@ public class Controller {
     public JournalEntry updateJournalEntry(@PathVariable Long myId, @RequestBody JournalEntry entry){
         return null;
     }
+
+    @Autowired
+    private org.springframework.data.mongodb.core.MongoTemplate mongoTemplate;
+
+    @GetMapping("/db")
+    public String getDbName() {
+        return mongoTemplate.getDb().getName();
+    }
+
+    @PostConstruct
+    public void printDb() {
+        System.out.println("Connected DB: " + mongoTemplate.getDb().getName());
+    }
+
 }
