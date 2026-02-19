@@ -62,14 +62,15 @@ public class Controller {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/id/{myId}")
-    public ResponseEntity<?> updateJournalEntry(@PathVariable ObjectId myId, @RequestBody JournalEntry entry){
+    @PutMapping("/id/{username}/{myId}")
+    public ResponseEntity<?> updateJournalEntry(@PathVariable ObjectId myId,
+                                                @RequestBody JournalEntry entry, @PathVariable String username){
         //find the entry which is to be updated
         JournalEntry old = journalEntryService.findById(myId).orElse(null);
         if(old!=null){
             old.setTitle(entry.getTitle()!=null && !entry.getTitle().equals("") ? entry.getTitle() : old.getTitle());
             old.setContent(entry.getContent()!=null && !entry.getContent().equals("") ? entry.getContent() : old.getContent());
-//            journalEntryService.saveEntry(old, user);
+            journalEntryService.saveEntry(old);
             return new ResponseEntity<>(old,HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);

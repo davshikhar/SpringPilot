@@ -36,6 +36,10 @@ public class JournalEntryService {
         }
     }
 
+    public void saveEntry(JournalEntry journalEntry){
+        journalEntryRepo.save(journalEntry);
+    }
+
     public List<JournalEntry> getAll(){
         return journalEntryRepo.findAll();
     }
