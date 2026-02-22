@@ -28,4 +28,7 @@ public class User {
 
     @DBRef
     private List<JournalEntry> journalEntries = new ArrayList<>();
+
+    //to check the different types of roles that the user has
+    private List<String> roles;
 }

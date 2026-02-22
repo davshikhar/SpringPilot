@@ -76,6 +76,7 @@ public class Controller {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    /* for testing the connection
     @Autowired
     private org.springframework.data.mongodb.core.MongoTemplate mongoTemplate;
 
@@ -88,5 +89,7 @@ public class Controller {
     public void printDb() {
         System.out.println("Connected DB: " + mongoTemplate.getDb().getName());
     }
+
+     */
 
 }
