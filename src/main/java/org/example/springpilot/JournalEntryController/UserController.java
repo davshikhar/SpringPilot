@@ -1,6 +1,7 @@
 package org.example.springpilot.JournalEntryController;
 
 import org.example.springpilot.Entity.User;
+import org.example.springpilot.Repository.UserEntryRepo;
 import org.example.springpilot.Service.UserEntryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,9 @@ public class UserController {
     @Autowired
     private UserEntryService userEntryService;
 
+    @Autowired
+    private UserEntryRepo userEntryRepo;
+
     @PostMapping
     public void createUser(@RequestBody User user){
         userEntryService.saveNewUser(user);
@@ -29,11 +33,16 @@ public class UserController {
          assert authentication != null;
          String username = authentication.getName();
          User userInDb = userEntryService.findByUsername(username);
-         if(userInDb!=null){
-             userInDb.setUsername(user.getUsername());
-             userInDb.setPassword(user.getPassword());
-             userEntryService.saveUser(userInDb);
-         }
+         userInDb.setUsername(user.getUsername());
+         userInDb.setPassword(user.getPassword());
+         userEntryService.saveUser(userInDb);
          return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteByUserId(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        userEntryRepo.deleteByUserName(authentication.getName());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
