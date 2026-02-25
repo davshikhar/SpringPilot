@@ -42,7 +42,7 @@ public class UserController {
     @DeleteMapping
     public ResponseEntity<?> deleteByUserId(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        userEntryRepo.deleteByUserName(authentication.getName());
+        userEntryRepo.deleteByUsername(authentication.getName());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

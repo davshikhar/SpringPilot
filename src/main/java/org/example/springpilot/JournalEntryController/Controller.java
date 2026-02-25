@@ -9,6 +9,8 @@ import org.example.springpilot.Service.UserEntryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -24,8 +26,10 @@ public class Controller {
     private UserEntryService userEntryService;
 
 
-    @GetMapping("/{username}")
-    public ResponseEntity<?> getAllEntriesByUser(@PathVariable String username){
+    @GetMapping()
+    public ResponseEntity<?> getAllEntriesByUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
         User user = userEntryService.findByUsername(username);
         //getting all the entries of the specific user
         List<JournalEntry> entries = user.getJournalEntries();
@@ -44,8 +48,10 @@ public class Controller {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/{username}")
-    public ResponseEntity<JournalEntry> createEntry(@RequestBody JournalEntry myEntry, @PathVariable String username){
+    @PostMapping()
+    public ResponseEntity<JournalEntry> createEntry(@RequestBody JournalEntry myEntry){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
         try{
             journalEntryService.saveEntry(myEntry,username);
             return new ResponseEntity<>(myEntry, HttpStatus.CREATED);

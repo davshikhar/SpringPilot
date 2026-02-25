@@ -44,6 +44,6 @@ public class UserEntryService {
     }
 
     public User findByUsername(String username){
-        return userEntryRepo.findByUserName(username);
+        return userEntryRepo.findByUsername(username);
     }
 }
