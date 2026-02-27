@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/journal")
@@ -41,9 +42,15 @@ public class Controller {
 
     @GetMapping("/id/{myId}")
     public ResponseEntity<JournalEntry> getJournalEntry(@PathVariable ObjectId myId){
-        Optional<JournalEntry> entry = journalEntryService.findById(myId);
-        if(entry.isPresent()){
-            return new ResponseEntity<>(entry.get(), HttpStatus.OK);
+        Authentication authenticaiton = SecurityContextHolder.getContext().getAuthentication();
+        String username = authenticaiton.getName();
+        User user = userEntryService.findByUsername(username);
+        List<JournalEntry> collect=user.getJournalEntries().stream().filter(x -> x.getId().equals(myId)).collect(Collectors.toList());
+        if(!collect.isEmpty()){
+            Optional<JournalEntry> entry = journalEntryService.findById(myId);
+            if(entry.isPresent()){
+                return new ResponseEntity<>(entry.get(), HttpStatus.OK);
+        }
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -61,8 +68,10 @@ public class Controller {
         }
     }
 
-    @DeleteMapping("/id/{username}/{myId}")
-    public ResponseEntity<?> deleteJournalEntry(@PathVariable ObjectId myId , @PathVariable String username){
+    @DeleteMapping("/id/{myId}")
+    public ResponseEntity<?> deleteJournalEntry(@PathVariable ObjectId myId){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
         //deleting the journal entries by id
         journalEntryService.deleteById(myId,username);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
