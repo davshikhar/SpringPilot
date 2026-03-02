@@ -24,11 +24,17 @@ public class UserEntryService {
         userEntryRepo.save(user);
     }
 
-    public void saveNewUser(User user){
-        //encoding the password that the user sent and then saving it in the db
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(Arrays.asList("USER"));
-        userEntryRepo.save(user);
+    public boolean saveNewUser(User user){
+        try{
+            //encoding the password that the user sent and then saving it in the db
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setRoles(Arrays.asList("USER"));
+            userEntryRepo.save(user);
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
     }
 
     public void saveAdmin(User user){
