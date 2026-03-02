@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: SpringPilot
+  mongodb:
+    uri: ${MONGO_URI}
+    database: ${MONGO_DB}
+  data:
+    mongodb:
+      auto-index-creation: true
+
+server:
+  port: 8081
