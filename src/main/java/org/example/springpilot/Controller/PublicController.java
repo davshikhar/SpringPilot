@@ -1,4 +1,4 @@
-package org.example.springpilot.JournalEntryController;
+package org.example.springpilot.Controller;
 
 import org.example.springpilot.Entity.User;
 import org.example.springpilot.Service.UserEntryService;

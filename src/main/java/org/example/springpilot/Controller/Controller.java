@@ -1,6 +1,5 @@
-package org.example.springpilot.JournalEntryController;
+package org.example.springpilot.Controller;
 
-import jakarta.annotation.PostConstruct;
 import org.bson.types.ObjectId;
 import org.example.springpilot.Entity.JournalEntry;
 import org.example.springpilot.Entity.User;

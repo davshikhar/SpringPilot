@@ -3,6 +3,8 @@ package org.example.springpilot.Service;
 import org.bson.types.ObjectId;
 import org.example.springpilot.Entity.User;
 import org.example.springpilot.Repository.UserEntryRepo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,6 +19,8 @@ public class UserEntryService {
 
     @Autowired
     private UserEntryRepo userEntryRepo;
+
+    private static final Logger logger = LoggerFactory.getLogger(UserEntryService.class);
 
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -33,6 +37,7 @@ public class UserEntryService {
             return true;
         }
         catch(Exception e){
+            logger.info("first use of the logger");
             return false;
         }
     }
