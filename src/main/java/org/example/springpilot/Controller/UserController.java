@@ -3,6 +3,8 @@ package org.example.springpilot.Controller;
 import org.example.springpilot.Entity.User;
 import org.example.springpilot.Repository.UserEntryRepo;
 import org.example.springpilot.Service.UserEntryService;
+import org.example.springpilot.Service.WeatherService;
+import org.example.springpilot.api.response.WeatherResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,9 @@ public class UserController {
 
     @Autowired
     private UserEntryRepo userEntryRepo;
+
+    @Autowired
+    private WeatherService weatherService;
 
     @PostMapping
     public void createUser(@RequestBody User user){
@@ -47,6 +52,11 @@ public class UserController {
     @GetMapping
     public ResponseEntity<?> greeting(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return new ResponseEntity<>("Hi "+authentication.getName(),HttpStatus.OK);
+        WeatherResponse response = weatherService.getWeather("Mumbai");
+        String greeting = "";
+        if(response!=null){
+            greeting = "weather feels" + response.getCurrent().getFeelsLike();
+        }
+        return new ResponseEntity<>("Hi " + authentication.getName()+greeting ,HttpStatus.OK);
     }
 }
