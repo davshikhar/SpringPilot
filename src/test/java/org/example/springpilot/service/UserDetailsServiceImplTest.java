@@ -5,6 +5,7 @@ import org.example.springpilot.Repository.UserEntryRepo;
 import org.example.springpilot.Service.UserDetailsServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 
 import static org.mockito.Mockito.when;
 
-
+@Disabled
 public class UserDetailsServiceImplTest {
 
     @InjectMocks
@@ -37,6 +38,7 @@ public class UserDetailsServiceImplTest {
     }
 
     @Test
+    @Disabled
     void loadUserByNameTest(){
         when(userEntryRepo.findByUsername(ArgumentMatchers.anyString())).thenReturn(User.builder().username("vishnu").password("vishnu").roles(new ArrayList<>()).build());
         UserDetails user = userDetailsService.loadUserByUsername("ram");

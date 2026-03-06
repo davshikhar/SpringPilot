@@ -7,26 +7,29 @@
         </encoder>
     </appender>
 
-    <appender name="myFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>
-            SpringPilot.log
-        </file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>SpringPilot.log-%d{yy-MM-dd_HH-mm}.%i.log</fileNamePattern>
-            <maxFileSize>10MB</maxFileSize>
-            <maxHistory>10</maxHistory>
-        </rollingPolicy>
-        <encoder>
-            <pattern>
-                %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
-            </pattern>
-        </encoder>
-    </appender>
+<!--    this is the file logging config-->
+
+<!--    <appender name="myFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+<!--        <file>-->
+<!--            SpringPilot.log-->
+<!--        </file>-->
+<!--        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">-->
+<!--            <fileNamePattern>SpringPilot.log-%d{yy-MM-dd_HH-mm}.%i.log</fileNamePattern>-->
+<!--            <maxFileSize>10MB</maxFileSize>-->
+<!--            <maxHistory>10</maxHistory>-->
+<!--        </rollingPolicy>-->
+<!--        <encoder>-->
+<!--            <pattern>-->
+<!--                %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n-->
+<!--            </pattern>-->
+<!--        </encoder>-->
+<!--    </appender>-->
 
     <root level="INFO">
 <!--        including both the refs will make sure that the logs are printed in console and file also-->
         <appender-ref ref="myConsoleAppender"/>
-        <appender-ref ref="myFileAppender"/>
+<!--        here i have intentionally disabled the file logging-->
+<!--        <appender-ref ref="myFileAppender"/>-->
     </root>
 
 </configuration>
