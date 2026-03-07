@@ -1,20 +1,22 @@
 package org.example.springpilot.Service;
 
 import org.example.springpilot.api.response.WeatherResponse;
+import org.example.springpilot.cache.AppCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-@Component
+@Service
 public class WeatherService {
-//    @Value("${env.API_KEY}")
-    private static final String apiKey = "ecde3bad8db8d549e1dc08c694c66937";
+    @Value("${weather.api.key}")
+    private String apiKey;
 
-    private static final String api = "http://api.weatherstack.com/current?access_key=apiKey&query=CITY";
-
+//    private static final String api = "http://api.weatherstack.com/current?access_key=apiKey&query=CITY";
+//we will ask for the api from the mongodb
     /*api written below for local testing
     private static final String api2 = "http://localhost:3000/weather";
      */
@@ -22,8 +24,12 @@ public class WeatherService {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private AppCache appCache;
+
     public WeatherResponse getWeather(String city){
-        String finalApi = api.replace("CITY", city).replace("apiKey", apiKey);
+//        String finalApi = api.replace("CITY", city).replace("apiKey", apiKey);
+        String finalApi = appCache.App_Cache.get("weather_api").replace("CITY", city).replace("apiKey", apiKey);
         ResponseEntity<WeatherResponse> response = restTemplate.exchange(finalApi, HttpMethod.GET, null, WeatherResponse.class);
         WeatherResponse body = response.getBody();
         return body;
