@@ -2,6 +2,7 @@ package org.example.springpilot.Controller;
 
 import org.example.springpilot.Entity.User;
 import org.example.springpilot.Service.UserEntryService;
+import org.example.springpilot.cache.AppCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,9 @@ public class AdminController {
     @Autowired
     private UserEntryService userEntryService;
 
+    @Autowired
+    private AppCache appCache;
+
     @GetMapping("/all-users")
     public ResponseEntity<?> getAllUser(){
         List<User> allUsers=userEntryService.getAll();
@@ -28,5 +32,10 @@ public class AdminController {
     @PostMapping("/create-admin")
     public void createAdmin(@RequestBody User user){
         userEntryService.saveAdmin(user);
+    }
+
+    @GetMapping("/clear-app-cache")
+    public void clearAppCache(){
+        appCache.init();
     }
 }

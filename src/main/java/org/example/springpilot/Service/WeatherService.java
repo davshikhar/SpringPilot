@@ -2,6 +2,7 @@ package org.example.springpilot.Service;
 
 import org.example.springpilot.api.response.WeatherResponse;
 import org.example.springpilot.cache.AppCache;
+import org.example.springpilot.constants.PlaceHolders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
@@ -29,7 +30,7 @@ public class WeatherService {
 
     public WeatherResponse getWeather(String city){
 //        String finalApi = api.replace("CITY", city).replace("apiKey", apiKey);
-        String finalApi = appCache.App_Cache.get("weather_api").replace("CITY", city).replace("apiKey", apiKey);
+        String finalApi = appCache.appCache.get(AppCache.keys.WEATHER_API).replace(PlaceHolders.CITY, city).replace(PlaceHolders.API_KEY, apiKey);
         ResponseEntity<WeatherResponse> response = restTemplate.exchange(finalApi, HttpMethod.GET, null, WeatherResponse.class);
         WeatherResponse body = response.getBody();
         return body;
