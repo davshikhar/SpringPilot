@@ -2,6 +2,7 @@ package org.example.springpilot.Entity;
 
 import lombok.*;
 import org.bson.types.ObjectId;
+import org.example.springpilot.Sentiment;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -21,6 +22,8 @@ public class JournalEntry {
     private String content;
 
     private LocalDateTime date;
+
+    private Sentiment sentiment;
 
     //getter and setters removed due to the functionality of Lombok
 }
