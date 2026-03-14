@@ -20,7 +20,7 @@ public class AppCache {
     @Autowired
     private ConfigJournalAppRepository configJournalAppRepository;
 
-    public Map<String,String> appCache;
+    public Map<keys,String> appCache;
 
     @PostConstruct
     public void init(){
@@ -29,7 +29,8 @@ public class AppCache {
         appCache = new HashMap<>();
         List<ConfigJournalAppEntity> all = configJournalAppRepository.findAll();
         for(ConfigJournalAppEntity configJournalAppEntity: all) {
-            appCache.put(configJournalAppEntity.getKey(), configJournalAppEntity.getValue());
+            appCache.put(keys.valueOf(configJournalAppEntity.getKey()), configJournalAppEntity.getValue());
         }
+        System.out.println(appCache);
     }
 }

@@ -28,12 +28,27 @@ public class WeatherService {
     @Autowired
     private AppCache appCache;
 
+    @Autowired
+    private RedisService redisService;
+
     public WeatherResponse getWeather(String city){
 //        String finalApi = api.replace("CITY", city).replace("apiKey", apiKey);
-        String finalApi = appCache.appCache.get(AppCache.keys.WEATHER_API).replace(PlaceHolders.CITY, city).replace(PlaceHolders.API_KEY, apiKey);
-        ResponseEntity<WeatherResponse> response = restTemplate.exchange(finalApi, HttpMethod.GET, null, WeatherResponse.class);
-        WeatherResponse body = response.getBody();
-        return body;
+        WeatherResponse cached = redisService.get("weather_of_" + city, WeatherResponse.class);
+        if(cached!=null){
+            //if we will get the cached response we will directly return
+            //if we fail then we will go the else block
+            return cached;
+        }
+        else{
+            String finalApi = appCache.appCache.get(AppCache.keys.WEATHER_API).replace(PlaceHolders.CITY, city).replace(PlaceHolders.API_KEY, apiKey);
+            ResponseEntity<WeatherResponse> response = restTemplate.exchange(finalApi, HttpMethod.GET, null, WeatherResponse.class);
+            WeatherResponse body = response.getBody();
+            if(body!=null){
+                //here we are setting the value of key in the redis
+                redisService.set("weather_of_"+city,body,300l);
+            }
+            return body;
+        }
         /*
         localtesting test = localtesting.builder().city(city).build();
         HttpEntity httpEntity = new HttpEntity<>(test);
