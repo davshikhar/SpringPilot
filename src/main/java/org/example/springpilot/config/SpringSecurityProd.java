@@ -46,9 +46,11 @@ public class SpringSecurityProd {
     @Bean
     public AuthenticationProvider authenticationProvider(PasswordEncoder passwordEncoder) {
 
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
-        provider.setPasswordEncoder(passwordEncoder());
+//        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
+//        provider.setPasswordEncoder(passwordEncoder());
 
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(passwordEncoder);
+        provider.setUserDetailsService(userDetailsService);
         return provider;
     }
 }
