@@ -30,7 +30,7 @@ public class UserRepositoryImpl {
          */
 
         //to make sure that the email is a valid email we will use the below regex
-        query.addCriteria(Criteria.where("email").regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]{2,}$"));
+        query.addCriteria(Criteria.where("email").regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"));
         query.addCriteria(Criteria.where("sentimentAnalysis").is(true));
 
 /*        we can also do the above two queries by using and/or operator
