@@ -1,5 +1,6 @@
 package org.example.springpilot.Controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.springpilot.Entity.User;
 import org.example.springpilot.Repository.UserEntryRepo;
 import org.example.springpilot.Service.UserEntryService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
+@Tag(name="User APIs", description = "Read,Update & Delete User")
 public class UserController {
 
     @Autowired

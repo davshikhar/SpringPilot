@@ -1,5 +1,6 @@
 package org.example.springpilot.Controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.example.springpilot.Entity.User;
 import org.example.springpilot.Service.UserDetailsServiceImpl;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/public")
 @Slf4j
+@Tag(name="Public APIs")
 public class PublicController {
     //this controller is unauthenticated and all the endpoints are open to anyone who tries to access them.
 

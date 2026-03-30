@@ -1,5 +1,6 @@
 package org.example.springpilot.Controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.bson.types.ObjectId;
 import org.example.springpilot.Entity.JournalEntry;
 import org.example.springpilot.Entity.User;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/journal")
+@Tag(name="Journal APIs")
 public class Controller {
 
     @Autowired
@@ -40,13 +42,14 @@ public class Controller {
     }
 
     @GetMapping("/id/{myId}")
-    public ResponseEntity<JournalEntry> getJournalEntry(@PathVariable ObjectId myId){
+    public ResponseEntity<JournalEntry> getJournalEntry(@PathVariable String myId){
+        ObjectId objectId = new ObjectId(myId);
         Authentication authenticaiton = SecurityContextHolder.getContext().getAuthentication();
         String username = authenticaiton.getName();
         User user = userEntryService.findByUsername(username);
-        List<JournalEntry> collect=user.getJournalEntries().stream().filter(x -> x.getId().equals(myId)).collect(Collectors.toList());
+        List<JournalEntry> collect=user.getJournalEntries().stream().filter(x -> x.getId().equals(objectId)).collect(Collectors.toList());
         if(!collect.isEmpty()){
-            Optional<JournalEntry> entry = journalEntryService.findById(myId);
+            Optional<JournalEntry> entry = journalEntryService.findById(objectId);
             if(entry.isPresent()){
                 return new ResponseEntity<>(entry.get(), HttpStatus.OK);
         }

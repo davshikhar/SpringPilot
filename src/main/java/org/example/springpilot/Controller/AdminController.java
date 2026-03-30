@@ -1,5 +1,6 @@
 package org.example.springpilot.Controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.springpilot.Entity.User;
 import org.example.springpilot.Service.UserEntryService;
 import org.example.springpilot.cache.AppCache;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
+@Tag(name="Admin APIs")
 public class AdminController {
 
     @Autowired
