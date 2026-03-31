@@ -15,6 +15,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/public")
 @Slf4j
@@ -46,7 +48,7 @@ public class PublicController {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String token = jwtUtil.generateToken(userDetails);
-            return new ResponseEntity<>(token, HttpStatus.OK);
+            return new ResponseEntity<>(Map.of("token", token), HttpStatus.OK);
         }
         catch(Exception e){
             log.error(" \u274C Exception came:",e);
