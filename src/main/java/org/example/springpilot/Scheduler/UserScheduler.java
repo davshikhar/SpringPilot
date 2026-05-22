@@ -35,7 +35,7 @@ public class UserScheduler {
     @Autowired
     private AppCache appCache;
 
-    @Autowired
+    @Autowired(required = false)
     private KafkaTemplate<String, SentimentData> kafkaTemplate;
 
 //    @Scheduled(cron="0 0 9 * * SUN")
