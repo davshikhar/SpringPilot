@@ -38,37 +38,44 @@ public class UserScheduler {
     @Autowired(required = false)
     private KafkaTemplate<String, SentimentData> kafkaTemplate;
 
-//    @Scheduled(cron="0 0 9 * * SUN")
+    @Scheduled(cron="0 0 9 * * SUN")
     public void fetchUserAndMail(){
-        //it will integrate two things sending mail and fetching the users
         List<User> users = userRepositoryImpl.getUserForSA();
-        for (User user:users){
+        for(User user:users){
+            if(user.getEmail() == null || user.getEmail().isEmpty())
+                continue;
             List<JournalEntry> journalEntries = user.getJournalEntries();
-            List<Sentiment> sentiments = journalEntries.stream().filter(x -> x.getDate().isAfter(LocalDateTime.now().minus(7, ChronoUnit.DAYS))).map(x->x.getSentiment()).collect(Collectors.toList());
-            //getting the list of all the sentiments based on the last 7 days
+            List<Sentiment> sentiments = journalEntries.stream()
+                    .filter(x -> x.getDate().isAfter(LocalDateTime.now().minus(7,ChronoUnit.DAYS)))
+                    .map(JournalEntry::getSentiment)
+                    .filter(s -> s!=null)
+                    .collect(Collectors.toList());
+
+            if(sentiments.isEmpty())
+                continue;
+
             Map<Sentiment, Integer> sentimentCounts = new HashMap<>();
             for(Sentiment sentiment: sentiments){
-                if(sentiment!=null) {
-                    sentimentCounts.put(sentiment, sentimentCounts.getOrDefault(sentiment, 0) + 1);
-                }
+                sentimentCounts.put(sentiment, sentimentCounts.getOrDefault(sentiment, 0)+1);
             }
-            Sentiment mostFrequentSentiment = null;
-            int maxCount = 0;
-            for(Map.Entry<Sentiment,Integer> entry: sentimentCounts.entrySet()){
-                if(entry.getValue()>maxCount){
-                    maxCount = entry.getValue();
-                    mostFrequentSentiment = entry.getKey();
-                }
-            }
-            if(mostFrequentSentiment != null){
-                SentimentData sentimentData = SentimentData.builder().email(user.getEmail()).sentiment("Sentiment for last 7 days" + mostFrequentSentiment).build();
-                /// adding kafka fallback in case kafka gives error in connection.
+
+            Sentiment mostFrequent = sentimentCounts.entrySet().stream()
+                    .max(Map.Entry.comparingByValue())
+                    .map(Map.Entry::getKey)
+                    .orElse(null);
+            if(mostFrequent!=null){
+                SentimentData sentimentData = SentimentData.builder()
+                        .email(user.getEmail())
+                        .sentiment("Your most frequent sentiment this week was: "+mostFrequent)
+                        .build();
                 try{
-                    kafkaTemplate.send("weekly-sentiments", sentimentData.getEmail(), sentimentData);/// Data is like sentimentData and key is email
-                }catch(Exception e){
-                    /// in case kafka fails we'll send email synchronously
-                /// we can also use sendGrid to do this
-                    emailService.sendEmail(sentimentData.getEmail(), "Sentiment for previous week", sentimentData.getSentiment());
+                    kafkaTemplate.send("weekly-sentiments",sentimentData.getEmail(),sentimentData);
+                }
+                catch(Exception e){
+                    // this is kafka fallback is kafka fails
+                    emailService.sendEmail(sentimentData.getEmail(),
+                            "Your weekly sentiment summary",
+                            sentimentData.getSentiment());
                 }
             }
         }

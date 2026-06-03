@@ -64,4 +64,24 @@ public class UserEntryService {
     public User findByUsername(String username){
         return userEntryRepo.findByUsername(username);
     }
+
+    public void updateCity(String username, String city){
+        User user = findByUsername(username);
+        user.setCity(city);
+        saveUser(user);
+    }
+
+    public void addCity(String username, String city){
+        User user = findByUsername(username);
+        if(!user.getListCities().contains(city)){
+            user.getListCities().add(city);
+            saveUser(user);
+        }
+    }
+
+    public void removeCity(String username, String city){
+        User user = findByUsername(username);
+        user.getListCities().remove(city);
+        saveUser(user);
+    }
 }

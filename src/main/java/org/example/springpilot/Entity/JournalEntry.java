@@ -1,5 +1,7 @@
 package org.example.springpilot.Entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.*;
 import org.bson.types.ObjectId;
 import org.example.springpilot.Sentiment;
@@ -14,6 +16,7 @@ import java.time.LocalDateTime;
 public class JournalEntry {
 
     @Id
+    @JsonSerialize(using = ToStringSerializer.class)
     private ObjectId id;
 
     @NonNull

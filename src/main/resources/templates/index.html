@@ -30,6 +30,7 @@
                             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                         </svg>
                     </button>
+                    <button id="auth-btn" class="btn" onclick="handleAuthBtn()"></button>
                 </div>
             </nav>
         </header>
@@ -62,16 +63,6 @@
                     <p>Swagger UI for interactive API exploration</p>
                 </div>
             </section>
-
-            <section class="api-links">
-                <h3>Quick Links</h3>
-                <div class="links-grid">
-                    <a href="/login" class="link-card">
-                        <span class="link-icon">👤</span>
-                        <span>Login here</span>
-                    </a>
-                </div>
-            </section>
         </main>
 
         <footer>
@@ -80,5 +71,34 @@
     </div>
 
     <script src="/js/theme.js"></script>
+    <script src="/js/api.js"></script>
+    <script>
+        function handleAuthBtn() {
+            if (API.isAuthenticated()) {
+                if (confirm('Are you sure you want to logout?')) {
+                    API.logout();
+                }
+            } else {
+                window.location.href = '/login';
+            }
+        }
+
+        // Set button text based on auth state
+        const authBtn = document.getElementById('auth-btn');
+        if (API.isAuthenticated()) {
+            authBtn.textContent = 'Logout';
+            authBtn.classList.add('btn-secondary');
+
+            // Show Dashboard button
+            const dashBtn = document.createElement('button');
+            dashBtn.textContent = 'Dashboard';
+            dashBtn.className = 'btn btn-secondary';
+            dashBtn.onclick = () => window.location.href = '/dashboard';
+            authBtn.parentElement.insertBefore(dashBtn, authBtn);
+        } else {
+            authBtn.textContent = 'Login / Signup';
+            authBtn.classList.add('btn-primary');
+        }
+    </script>
 </body>
 </html>

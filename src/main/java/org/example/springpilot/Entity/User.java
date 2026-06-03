@@ -1,5 +1,6 @@
 package org.example.springpilot.Entity;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -27,6 +28,10 @@ public class User {
 
     private String email;
     private Boolean sentimentAnalysis;
+
+    private List<String> listCities = new ArrayList<>();
+
+    private String city;
 
     @NonNull
     private String password;

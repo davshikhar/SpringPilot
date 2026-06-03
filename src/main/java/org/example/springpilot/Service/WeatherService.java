@@ -33,6 +33,8 @@ public class WeatherService {
 
     public WeatherResponse getWeather(String city){
 //        String finalApi = api.replace("CITY", city).replace("apiKey", apiKey);
+
+
         WeatherResponse cached = redisService.get("weather_of_" + city, WeatherResponse.class);
         if(cached!=null){
             //if we will get the cached response we will directly return

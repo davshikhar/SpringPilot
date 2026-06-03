@@ -156,7 +156,9 @@ const UserAPI = {
     async getGreeting() {
         return await request('/user');
     },
-
+    async getMyWeather(){
+        return await request('/user/my-weather')
+    },
     async update(username, password) {
         return await request('/user', {
             method: 'PUT',
@@ -189,12 +191,50 @@ const AdminAPI = {
     }
 };
 
+const CityAPI = {
+    async getCity() {
+        return await request('/user/city');
+    },
+    async updateCity(city) {
+        return await request('/user/city', {
+            method: 'PUT',
+            body: JSON.stringify({ city }),
+        });
+    }
+};
+
+const WeatherAPI = {
+    async getWeather(city){
+        return await request(`/user/weather?city=${encodeURIComponent(city)}`)
+    }
+};
+
+const ListCitiesAPI = {
+    async getAll() {
+        return await request('/user/list-cities');
+    },
+    async add(city) {
+        return await request('/user/list-cities', {
+            method: 'POST',
+            body: JSON.stringify({ city }),
+        });
+    },
+    async remove(city) {
+        return await request(`/user/list-cities/${encodeURIComponent(city)}`, {
+            method: 'DELETE',
+        });
+    }
+};
+
 // Export for use in other files
 window.API = {
     Auth: AuthAPI,
     Journal: JournalAPI,
     User: UserAPI,
     Admin: AdminAPI,
+    City: CityAPI,
+    Weather: WeatherAPI,
+    ListCities: ListCitiesAPI,
     isAuthenticated,
     getUsername,
     logout,
