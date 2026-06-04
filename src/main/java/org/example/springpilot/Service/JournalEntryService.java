@@ -51,6 +51,9 @@ public class JournalEntryService {
     }
 
     public void saveEntry(JournalEntry journalEntry){
+        if(journalEntry.getContent() != null && !journalEntry.getContent().isEmpty()){
+            journalEntry.setSentiment(sentimentAnalysisService.getSentiment(journalEntry.getContent()));
+        }
         journalEntryRepo.save(journalEntry);
     }
 

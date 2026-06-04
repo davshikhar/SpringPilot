@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -97,6 +98,7 @@ public class Controller {
                 JournalEntry old = journalentry.get();
                 old.setTitle(entry.getTitle()!=null && !entry.getTitle().equals("") ? entry.getTitle():old.getTitle());
                 old.setContent(entry.getContent()!=null && !entry.getContent().equals("")? entry.getContent() : old.getContent());
+                old.setDate(LocalDateTime.now());
                 journalEntryService.saveEntry(old);
                 return new ResponseEntity<>(old, HttpStatus.OK);
             }

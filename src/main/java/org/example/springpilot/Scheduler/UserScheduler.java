@@ -1,7 +1,9 @@
 package org.example.springpilot.Scheduler;
 
+import lombok.extern.slf4j.Slf4j;
 import org.example.springpilot.Entity.JournalEntry;
 import org.example.springpilot.Entity.User;
+import org.example.springpilot.Repository.UserEntryRepo;
 import org.example.springpilot.Repository.UserRepositoryImpl;
 import org.example.springpilot.Sentiment;
 import org.example.springpilot.Service.EmailService;
@@ -21,6 +23,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 public class UserScheduler {
 
     @Autowired
@@ -37,20 +40,30 @@ public class UserScheduler {
 
     @Autowired(required = false)
     private KafkaTemplate<String, SentimentData> kafkaTemplate;
+    @Autowired
+    private UserEntryRepo userEntryRepo;
 
-//    @Scheduled(cron="0 0 9 * * SUN")
+    //    @Scheduled(cron="0 0 9 * * SUN")
     @Scheduled(cron="0 0/1 * ? * *")
     public void fetchUserAndMail(){
-        List<User> users = userRepositoryImpl.getUserForSA();
+//        List<User> users = userRepositoryImpl.getUserForSA();
+        List<User> users = userEntryRepo.findAll();
+        log.info("Scheduler running, users found: {}", users.size());// for debugging
         for(User user:users){
             if(user.getEmail() == null || user.getEmail().isEmpty())
                 continue;
             List<JournalEntry> journalEntries = user.getJournalEntries();
+            if(journalEntries.isEmpty()){
+                continue;
+            }
             List<Sentiment> sentiments = journalEntries.stream()
-                    .filter(x -> x.getDate().isAfter(LocalDateTime.now().minus(7,ChronoUnit.DAYS)))
+//                    .filter(x -> x.getDate().isAfter(LocalDateTime.now().minus(7,ChronoUnit.DAYS)))
+                    .filter(x -> x.getDate().isAfter(LocalDateTime.now().minus(10,ChronoUnit.MINUTES)))
                     .map(JournalEntry::getSentiment)
                     .filter(s -> s!=null)
                     .collect(Collectors.toList());
+
+            log.info("Sentiments found for {}: {}", user.getEmail(), sentiments.size());//for debugging
 
             if(sentiments.isEmpty())
                 continue;

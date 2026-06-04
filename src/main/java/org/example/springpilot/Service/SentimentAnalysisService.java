@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class SentimentAnalysisService {
+
     @Value("${anthropic.api-key}")
     private String apiKey;
 
@@ -26,7 +27,7 @@ public class SentimentAnalysisService {
                             "either HAPPY, SAD, ANXIOUS or ANGRY. Nothing else.\n\nJournal entry: "+text;
 
             MessageCreateParams params = MessageCreateParams.builder().
-                    model(Model.CLAUDE_3_5_HAIKU_20241022)
+                    model(Model.CLAUDE_HAIKU_4_5)
                     .maxTokens(10)
                     .addUserMessage(prompt)
                     .build();
@@ -41,7 +42,7 @@ public class SentimentAnalysisService {
         }
         catch(Exception e){
             log.error("Error calling Claude API for sentiment analysis",e);
-            return Sentiment.HAPPY;
+            return Sentiment.SAD;
         }
     }
 }
