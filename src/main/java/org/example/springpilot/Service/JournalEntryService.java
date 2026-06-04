@@ -25,14 +25,24 @@ public class JournalEntryService {
     @Autowired
     private UserEntryService userEntryService;
 
+    @Autowired
+    private SentimentAnalysisService sentimentAnalysisService;
+
     @Transactional
     public void saveEntry(JournalEntry journalEntry, String username){
         try{
             User user = userEntryService.findByUsername(username);
             journalEntry.setDate(LocalDateTime.now());
-            JournalEntry saved =journalEntryRepo.save(journalEntry);//extracting the saved entry in the db in the variable
-            user.getJournalEntries().add(saved);//adding the saved entry to user entry list
-            userEntryService.saveUser(user);//finally saving the user in the database.
+            //JournalEntry saved =journalEntryRepo.save(journalEntry);extracting the saved entry in the db in the variable
+            //user.getJournalEntries().add(saved);adding the saved entry to user entry list
+            //userEntryService.saveUser(user);finally saving the user in the database.
+            if(journalEntry.getContent() != null && !journalEntry.getContent().isEmpty()){
+                journalEntry.setSentiment(sentimentAnalysisService.getSentiment(journalEntry.getContent()));
+            }
+
+            JournalEntry saved = journalEntryRepo.save(journalEntry);
+            user.getJournalEntries().add(saved);
+            userEntryService.saveUser(user);
         }
         catch(Exception e){
             log.error("Exception :",e);
