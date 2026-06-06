@@ -3,10 +3,10 @@ spring:
     name: SpringPilot
   data:
     mongodb:
-      uri: ${MONGO_URI}
-      database: ${MONGO_DB}
-#      uri: ${SPRING_DATA_MONGODB_URI}
-#      database: ${SPRING_DATA_MONGODB_DATABASE}
+#      uri: ${MONGO_URI}
+#      database: ${MONGO_DB}
+      uri: ${SPRING_DATA_MONGODB_URI}
+      database: ${SPRING_DATA_MONGODB_DATABASE}
       auto-index-creation: true
   mail:
     host: smtp.gmail.com
