@@ -20,7 +20,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: shikhar6082/OLib:${{github.sha}}
+          tags: shikhar6082/oLib:${{github.sha}}
 
 #      - name: Deploy to the VM on AWS
 #        run: |
