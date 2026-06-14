@@ -3,10 +3,18 @@ spring:
     name: SpringPilot
   data:
     mongodb:
+      #For dev
 #      uri: ${MONGO_URI}
 #      database: ${MONGO_DB}
-      uri: ${SPRING_DATA_MONGODB_URI}
-      database: ${SPRING_DATA_MONGODB_DATABASE}
+
+      #For azure
+#      uri: ${SPRING_DATA_MONGODB_URI}
+#      database: ${SPRING_DATA_MONGODB_DATABASE}
+
+      #For AWS
+      uri: ${MONGODB_URI}
+      database: ${MONGO_DB}
+
       auto-index-creation: true
   mail:
     host: smtp.gmail.com
