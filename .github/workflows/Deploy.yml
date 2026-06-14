@@ -1,0 +1,6 @@
+name: Deploying the application to EC2
+on:
+  push:
+    branches: [production]
+jobs:
+
